@@ -1,6 +1,8 @@
 from http.server import HTTPServer, BaseHTTPRequestHandler
 
+# указывает на каком хосту запускается наш веб-сервер
 APP_HOST = 'localhost'
+# указывает на каком порту будет работать на веб-сервер
 APP_PORT = 8000
 
 class SimpleGetHandler(BaseHTTPRequestHandler):
@@ -17,16 +19,23 @@ class SimpleGetHandler(BaseHTTPRequestHandler):
                    f"</html>")
         return content.encode("utf8")
     
+
     def do_GET(self):
+        # указываем какие заголовки должны быть в нашем запросе
         self._set_headers()
         message = "Привет, мир!"
+        # преобразуем message в html код, преобразуем в ответ и отправляем клиенту
         self.wfile.write(self._html(message))
 
 
+# в аргументах указываем класс сервера и обработчик для наших GET запросов
 def run_server(server_class=HTTPServer, handler_class=BaseHTTPRequestHandler):
     server_address = (APP_HOST, APP_PORT)
+    # инициализируется сервер
     httpd = server_class(server_address, handler_class)
+    # указываем, что сервер необходимо хранить вечно (пока не упадет из-за ошибки)
     httpd.serve_forever()
 
+# запуск сервера
 if __name__ == "__main__":
     run_server(handler_class=SimpleGetHandler)
